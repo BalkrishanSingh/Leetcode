@@ -2,4 +2,4 @@
 
 2. Retry Array problem remove-duplicate-2 at a later stage as i had to look up the solution for it.
 
-3. return to rotate-right-k to optimise for time and storage.
+3. return to rotate-right-k to optimise for storage.

@@ -4,9 +4,10 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         k = k % len(nums)
-        for _ in range(k):
-            last_elem = nums[len(nums)-1]
-            del nums[len(nums)-1]
-            nums.insert(0, last_elem)
+        num = nums[::-1]
+        num[:k:] = num[k-1::-1]
+        num[k::] = num[:k-1:-1]
+        for i in range(len(num)):
+            nums[i] = num[i]
 
 #https://leetcode.com/problems/rotate-array/?envType=study-plan-v2&envId=top-interview-150
