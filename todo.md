@@ -4,4 +4,5 @@
 
 3. return to rotate-right-k to optimise for storage.
 
-4. return to buy-sell-stock-1 to optimise for time, marked unsolved as it exceeded time limit on some test cases
+4. retry to buy-sell-stock-1 at a later stage as i had to get some hints from the comments to optimise it for time
+5. do the convert-roman problem properly without hardcoding.
