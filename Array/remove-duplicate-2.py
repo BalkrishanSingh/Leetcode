@@ -2,18 +2,15 @@ from typing import List
 
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-       
-        if len(nums)< 2:
-            return 1
-        i:int = 2 # replacable number
-        k:int = 2# forward mover
-        while k < len(nums):
-            if  nums[i-2] != nums[k]:
-                nums[i] = nums[k]
-                i +=1
-            k+=1
-     
-        return i
+
+        if len(nums) < 2:
+            return
+        j: int = 2
+        for item in nums[2:]:
+            if nums[j-2] != item:
+                nums[j] = item
+                j+=1
+        return j
 #https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/?envType=study-plan-v2&envId=top-interview-150
         
 if __name__ == "__main__":
