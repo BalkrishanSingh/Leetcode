@@ -1,5 +1,41 @@
-from typing import List
+# @leet imports start
+from string import *
+from re import *
+from datetime import *
+from collections import *
+from heapq import *
+from bisect import *
+from copy import *
+from math import *
+from random import *
+from statistics import *
+from itertools import *
+from functools import *
+from operator import *
+from io import *
+from sys import *
+from json import *
+from builtins import *
+import string
+import re
+import datetime
+import collections
+import heapq
+import bisect
+import copy
+import math
+import random
+import statistics
+import itertools
+import functools
+import operator
+import io
+import sys
+import json
+from typing import *
+# @leet imports end
 
+# @leet start
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
         i:int = 0 # last confirmed unique
@@ -42,3 +78,4 @@ if __name__ == "__main__":
     # run_test("All Elements Match", [2, 2, 2], 1, [2])
     # run_test("No Elements Match", [1, 2, 3], 3, [1, 2, 3])
     # run_test("Single Element", [1], 1, [1])
+# @leet end
