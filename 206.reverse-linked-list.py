@@ -36,24 +36,19 @@ from typing import *
 # @leet imports end
 
 # @leet start
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    def checkInclusion(self, s1: str, s2: str) -> bool:
-        
-        
-        arr_s1 = [0]*26
-        for i in s1:
-            arr_s1[ord(i.lower()) - ord('a')] +=1
-        arr_s2 = [0]*26
-        left = 0
-        for right in range(len(s2)):
-           
-            if right - left + 1 > len(s1):
-                arr_s2[ord(s2[left].lower()) - ord('a')] -= 1
-                left +=1
-            if left > right:
-                return False 
-            arr_s2[ord(s2[right].lower()) - ord('a')] += 1
-            if arr_s2 == arr_s1:
-                return True
-        return False
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        curr = head
+        prev = None 
+        while curr!= None:
+            succ = curr.next
+            curr.next = prev
+            prev = curr
+            curr = succ
+        return prev
 # @leet end

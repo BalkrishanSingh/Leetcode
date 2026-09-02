@@ -37,23 +37,12 @@ from typing import *
 
 # @leet start
 class Solution:
-    def checkInclusion(self, s1: str, s2: str) -> bool:
-        
-        
-        arr_s1 = [0]*26
-        for i in s1:
-            arr_s1[ord(i.lower()) - ord('a')] +=1
-        arr_s2 = [0]*26
-        left = 0
-        for right in range(len(s2)):
-           
-            if right - left + 1 > len(s1):
-                arr_s2[ord(s2[left].lower()) - ord('a')] -= 1
-                left +=1
-            if left > right:
-                return False 
-            arr_s2[ord(s2[right].lower()) - ord('a')] += 1
-            if arr_s2 == arr_s1:
-                return True
-        return False
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        check = set()
+        for i in nums:
+            if i not in check:
+                check.add(i)
+            else:
+                return True 
+        return False 
 # @leet end
