@@ -39,13 +39,11 @@ from typing import *
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         A = {}
-        for i,num in enumerate(nums):
-            if (target - num) not in A:
-                A[target - num] = i
-            else:
-                return [i,A[target - num]]
-            print(A,[i,A[target - num]],(target - num) not in A)
-        return [-1,-1]
-
+4       for i,num in enumerate(nums):
+5           difference = target- num
+6           if num in A:
+7               return [A[num],i]
+8           A[difference] = i 
+    9   return [-1,-1] 
         
 # @leet end
