@@ -58,30 +58,30 @@ Direction:
 
 constraints:
     n: 2*10^4. I believe a n^2 solutin should work.
-       
-
-what exactly is my logic here that is going wrong?
-
-
+        
 
 """
 # @leet start
 
 class Solution:
     def trap(self, height: List[int]) -> int:
-        left_highest= [0]*(len(height)+1)
-        right_highest =[0]*(len(height)+1)
-        water = 0
-        #populating left_highest
-        left_highest[0] = height[0]
-        for i in range(1,len(height)-1):
-            left_highest[i] = max(left_highest[i-1],height[i])
-        right_highest[len(height)-1] = height[len(height)-1]
-        for i in range(len(height)-2,-1,-1):
-            right_highest[i] = max(right_highest[i+1],height[i])
-        for i in range(1,len(height)-1):
-            water += max(min(left_highest[i-1],right_highest[i+1])-height[i],0)
-        return water
+        left= 0
+        right = len(height) - 1
+        left_max = height[left]
 
+        right_max = height[right]
+        water = 0
+        while left < right:
+            if left_max < right_max:
+                left +=1 
+                left_max = max(left_max,height[left])
+                water += max(left_max-height[left],0)
+
+            else:
+                right -=1  
+                right_max = max(right_max,height[right])
+                water += max(right_max-height[right],0)
+
+        return water
                     
 # @leet end
