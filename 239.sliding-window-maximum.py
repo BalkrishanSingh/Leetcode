@@ -35,56 +35,61 @@ import json
 from typing import *
 # @leet imports end
 """
+summary: 
+For a given array of size n and sliding window size k,
+we need to return a list of the maximum number in each position of the sliding window 
+as it slides over 1 index at a time from left to right.
 
-You are given an array of integers nums, 
-it is 1 to 10e5 in size which is quite large and as such the solution should be O(n) or O(nlogn)
+A simple brute force solution would be to iterate over the arrray from [0,n-k-1] where at each step, we append max(arr[i:i+k]) to the result.
+this would be a O(N^2) solution.
 
+The given constraints however require a Log(n) or O(n) solution..
 
-there is a sliding window of size k which is moving from the very left of the array to the very right.
-You can only see the k numbers in the window. 
+Optimally, the solution seems to be a monotonic deque 
+where the left most index will always contain the current maximal value and return it each time.
 
-sliding window but there are negative numbers in the array..
+we loop overall elements in the array from [0,n-1] and we find the start of the sliding window with i-k-1 
+We only need to check at the start of the loop if this value is invalid or not and thereby remove it if so.
+We store only indexes in the deque and as such we can compare by checking if deque[0] < i-(k-1).
+Next we need to setup the logic for maintaining the monotonicity of the deque.
+    For the current element 
+    at each step, we check if DQ itself exists or not
+    then we check if the left most value is greater than the current element. If yes, end loop
+    else we pop it and loop over
+    then we add the current element to the right of the deque
+    
+then we append the left most element to the solutions array. 
 
-Each time the sliding window moves right by one position. Return the max sliding window.
-Based on the example, the returning value is a array of the maximums in each sliding window.
+We do have a slight logical issue here where we will get N values added to the results array and not N-K-1.
 
-basically we have to find the maxiumum in each given sliding window of a array, add it to a result array and return that array.
+which is a slight issue...
+I think it would be optimal to wait for i to be >= k-1 to add to the results array perhaps?
 
-Main restriction should be in optimisation as a simple bruteforce solution should be to seperately find max on each of the sliding window,
-it would be a slow solution around O(K*(N-K-1)) which seems to time out on implentation as I thought.
-left = 0
-    right = k 
-    result = []
-    while right <= len(nums):
-        result.append(max(nums[left:right]))
-        left += 1 
-        right += 1
-    return result
-Perhaps we could use a max heap of size k where I append the new element each time and pop the oldest one at the same time and then sort and return?
-It would be worse time complexity than just using max operation as we have to linearly search and remove the last element, add a new element which is O((k+logk+1)*(N-K-1))
+for example.. 
+[1,3,-1,-3,5,3] with k =3.
+dq res i i-k-1
+0 [] 0  -2
+1 [] 1  -1
+1 [3] 2  -0
+1 [3,3] 3 1, popped.
+4 [3,3,5]4 2
+3 1 1 3 , 3
 
-we can consider a monotonic Deque where left elements slide out as we go by getting popped each loop
-and following the principles of monotonic stack where we keep remove the right element if it is smaller then the current new element repeatedly until all are removed or we find a greater value which will be stored at the front.
-
-we return this front value and each loop we check if its in the range of the allowed sliding window by i-k+1 which is just a simple algebric transofmration of i-j+1 = k
-
-either way, we have to use O(n) space complexity for k = 1 where every item is a maximum and needs to be returned
-
-
-"""
+""
 # @leet start
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        dq = Deque()
-        result = []
+        results = []
+        dq = deque()
+
         for i in range(len(nums)):
-            if dq and dq[0] < i - k +1:
+            while dq and dq[0]< i -(k-1):
                 dq.popleft()
-            while dq and nums[dq[-1]] <= nums[i]:
+            while dq and nums[dq[-1]] < nums[i]:
                 dq.pop()
             dq.append(i)
-            if i >= k - 1:
-                result.append(nums[dq[0]])
-        return result
-
+            if dq and i >= k-1:
+                results.append(nums[dq[0]])
+        return results
+        
 # @leet end

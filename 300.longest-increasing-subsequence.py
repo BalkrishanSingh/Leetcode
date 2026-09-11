@@ -59,59 +59,36 @@ Patterns:
     it seems to be a DP problem based on subsequences..
 
 Decision:
-    beginning at index 1, what are my actions.
-    Include element 1 in sequence 
-        consequences:
-            I can only take a value greater than element 1. I need to somehow keep the previous element 
-        contribution:
-            +1 to the length of the sequence.
-        affected variable:
-            1 increases to 2
-            we repeat decision,
-                include 2
+    LongestIncreasingSubsequenceEndingAt(i)
 
-                not include 2
 
-    do not include element 1 in sequence.
-        consequences:
-            no consequences
-        contribution:
-            no contribution
-        affected variable:
-            1 still increases by 1 
-            we repeat decision.
-                include 2
-                not include 2..
-    base case:
-        if i >= n:
-            return 0..
-    
-    recurrence relation.
-    dp(i,largest):
-        if i>= n:
-            return 0
-        included = 0
-        if arr[i] > largest:
-            included =  1+ dp(i+1,arr[i])
-        not_included = dp(i+1,largest)
-        return max(included,not_included)
+        max_len = 1, base case as there is always atleast one element in given array.
+        We need to check going from 0 to i-1 with index called j, what is the length of the longest subsequence that ends at i:
+        if arr[j] is less then arr[i] then it is valid to be included in the subsequence..
+            if we find the LongestIncreasingSubsequenceEndingAt(j) and then compare it with max_len for each valid j,
+            we can find the LongestIncreasingSubsequenceEndingAt(i).
+        j is valid only and only if it is less than i.
 
-     
+        we need to loop over the result for all Subsequences that might end at that point instead of returning longest subsequences ending at n-1
+        
+        bounds:
+        [0,nums(nums)-1]
+        direction:
+        j before i,
+        smaller before bigger.
+        0 to n
 
 """
 
 # @leet start
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        @cache
-        def dp(i,largest):
-            if i>= len(nums):
-                return 0
-            included = 0
-            if nums[i] > largest:
-                included =  1+ dp(i+1,nums[i])
-            not_included = dp(i+1,largest)
-            return max(included,not_included)
-        return dp(0,-(10e4+1))
-
+        LongestIncreasingSubsequenceEndingAt = [1]*(len(nums))
+        for i in range(len(nums)):
+            max_len = 1
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    max_len = max(max_len,LongestIncreasingSubsequenceEndingAt[j]+1)
+            LongestIncreasingSubsequenceEndingAt[i] = max_len 
+        return max(LongestIncreasingSubsequenceEndingAt)
 # @leet end
