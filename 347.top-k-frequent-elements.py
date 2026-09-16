@@ -34,32 +34,50 @@ import sys
 import json
 from typing import *
 # @leet imports end
+"""
+given, a array and a integer k. we need to find the k most requent elements.
+
+constraints: n: [1,10e5]
+            nums[i]: [-10e4,10e4].
+
+For this question, we could use a min heap with the pair (frequency, element) stored in the minheap,
+where we first compute the frequency of all elements and store it in a hashmap beforer we proceed to make the minheap.
+for each element as we traverse over the hashmap,we compare its frequency with the frequency of the element with the smallest fequency and replace it if bigger.
+then we just use the minheap at the end with a list comprehension to only return the num values. This should be a nlogn solution.
+
+we could also simplfy this and use heapq.nlargest() with the same list comprehension and zip function to simplfy.
+
+We could also use a frequency indexed array of size, n+1 where 0th index represents elements with 0 frequency while the rest ith position index signify i frequency,
+it will be a list of lists.
+
+
+"""
+
+
+
 
 # @leet start
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        arr = [set()]
-        hashmap = {}
-        for i in nums:
-            if i in hashmap:
-                
-                index = hashmap[i]-1
-                if index < len(arr):
-                    arr[index].remove(i)
-                if index+1 < len(arr): 
-                    arr[index+1].add(i)
-                else:
-                     arr.append(set([i,]))
+        frequencyMap = {}
 
-                hashmap[i] += 1
-            else:
-                hashmap[i] = 1
-                arr[0].add(i)
-        result = []
-        for i in range(len(arr) - 1, -1, -1):
-            for num in arr[i]:
-                result.append(num)
-                if len(result) == k:
-                    return result            
-        return result
+        for num in nums:
+            frequencyMap[num] = frequencyMap.get(num,0)+1
+        buckets = [[] for _ in range(len(nums)+1)]
+
+        for num,frequency in frequencyMap.items():
+            buckets[frequency].append(num)
+        res = []
+        for idx in range(len(buckets)-1,-1,-1):
+            for item in buckets[idx]:
+                res.append(item)
+                if len(res) == k:
+                    return res
+        return res
+            
+        # return [x[1] for x in heapq.nlargest(k,zip(frequencyMap.values(),frequencyMap.keys()))]
+
+        
+
+        
 # @leet end
