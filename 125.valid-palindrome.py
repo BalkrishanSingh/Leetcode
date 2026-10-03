@@ -34,24 +34,26 @@ import sys
 import json
 from typing import *
 # @leet imports end
+"""
+given a string, we need to find out if it's a palindrome, keeping in mind the constraints that we need to ignore case, and remove non alphanumeric characters.
 
+Since it's a check for a palindrome, we can simply use a stack, if something matches the top or is the middle element, we pop, if it doesn't then if its alphanumeric we add it to stack.
+if stack empty we return true.
+
+For doing alphanumeric checks in python, we can use. str.isalpha() i believe and use islower to convert it down.
+
+"""
 # @leet start
 class Solution:
     def isPalindrome(self, s: str) -> bool:
+        parsedStr = ""
 
-        i:int = 0
-        j:int = len(s) -1
-        s = s.lower()
+        for chr in s:
+            if chr.isalnum():
+                parsedStr += chr    
+        parsedStr = parsedStr.lower() 
+        return parsedStr[::] == parsedStr[::-1] 
+   
 
         
-        while i < j:
-            while not s[i].isalnum() and i < j:
-                i+=1
-            while not s[j].isalnum() and i < j:
-                j-=1
-            if s[i] != s[j]:
-                return False
-            i +=1
-            j -=1
-        return True
 # @leet end

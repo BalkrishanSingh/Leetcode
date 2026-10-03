@@ -37,19 +37,19 @@ from typing import *
 
 # @leet start
 class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        result = -1
-        left = 0
-        right = len(nums) - 1
-        while left <= right:
-            mid = left + (right-left)//2 
+    def search(self, nums: list[int], target: int) -> int:
+        left =0 
+        right = len(nums)
+        result = -1 
+        while left < right:
+            mid = (left+right)//2 
             if nums[mid] == target:
-                result = mid
+                result = mid 
                 break 
             elif nums[mid] < target:
-                left = mid +1 
+                left = mid+1 
             else:
-                right = mid - 1
+                right = mid
         return result
-        
+
 # @leet end

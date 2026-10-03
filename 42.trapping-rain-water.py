@@ -37,48 +37,55 @@ from typing import *
 
 """   
 Summary:
-    we need to find the sum of water that is at possible to be collected at each index in a given array of heights,
-    main restriction on the water that is possible at a index is the height of the indexes surrounding it 
-    and the height of the index itself.
+    Given a list of heights for a given area, we are asked to find the sum of water level at each position in that array given that water accumulates to the the minimum of the heighest height on left and right of the index.
+    
+    For a given index i, water at i is given by (min(leftmax,rightmax)-height[i],0)
+    we should only try to calculate this value if we are sure that the value min(leftmax,rightmax) can't increase any further.
+    to find the next best height, we increment the smaller max currently towards the direction of the higher max as the bottleneck is the smaller value.
+    and if we move past a index, then that index will never be having a higher value so we calculate the water level
 
-    For example, for given input, 4,2,0,3,2,5. We can only store 1 unit of water at index 4 because the minimum of the left and right highest heights is 3 and the value of the height at that index itself is 2.
+    we can simply use a two pointer approach to decide this
+    where left pointer starts at 0,
+    right at n-1
+    we keep a left max and right max going and initially set it to the values themselves.
+    then we just keep running the formula and increment left or right.
+    each time calculating water by using the height[left] or height[right] based on what is incremented.
 
-    Since we need to consider the left and right max of each point, we can use a prefix and suffix array where each index contains the highest height so far from either direction of index i and then we can use the formula water[i] = max(min(left_max[i],right_max[i])-height[i]),0)
-    this prefix and suffix solution could be made more optimal as we'd need 3 loops of size n and O(n) space to find the solution. 
-    constraints are, n:[1,2*10e4] which is large and as such require a nlogn or n time complexity solution ideally..
+    we should calculate water level at a step before incrementing ofcourse as that is a common error i remember in two pointer approach
+    
+    We should use left <= right for the terminating conditon as we are using len(right)-1 as our index and we only save the water value before we increment so, so we need the next iteration.
 
-    Aside from the prefix suffix solution, for a simple brute force solution, we can loop over the entire array
-    then loop over twice more where one loop is from 0 to i and another is i to n-1 to find the left largest and right largest for each element for a O(n^3) solution..
-
-    A more optimal solution could be to simply use two pointers left and right. 
-    We only update the value of water at a index or store it in a sum if we are about to move past that node with the lexft or right index and as there should be no possible way it has a higher left_max or right_max, based on what we incremented or decremented.
-    to find the water at that node, we should use the stored left_max and right_max found so far
-
-    implementing solution.
-
-
+    203
+    left = 0
+    right = 2
+    0
+    left = 1 
+    right = 2
+    2
+   
 
 """
 # @leet start
 class Solution:
-    def trap(self, height: List[int]) -> int:
+    def trap(self, height: list[int]) -> int:
         left = 0
-        right = len(height) - 1 
-        left_max = height[left]
-        right_max = height[right]
-        water = 0 
-        while left < right:
-            if left_max < right_max:
-                left +=1 
-                left_max = max(left_max,height[left])
-                water += max(left_max - height[left],0)
+        right = len(height)-1 
+        leftmax = height[0]
+        rightmax = height[right]
+        sum = 0
+        
+        while left <= right:
+            if leftmax < rightmax:
+                sum += max(leftmax -height[left],0)
+                leftmax = max(leftmax,height[left])
+                left +=1
             else:
-                right -= 1
-                right_max = max(right_max,height[right])
-                water += max(right_max - height[right],0)
-        return water
+                sum += max(rightmax - height[right],0)
+                rightmax =max(rightmax,height[right])
+                right-=1
+        return sum
 
-
+                
 
         
 # @leet end
