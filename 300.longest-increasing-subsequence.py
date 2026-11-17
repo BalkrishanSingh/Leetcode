@@ -35,80 +35,57 @@ import json
 from typing import *
 # @leet imports end
 """
-given question asks us to find the longest strictly increasing subsequence of a given array,
-and return it's length.
+For a given problem, we need to find the longest increasing subsequence of a array.
 
-the size of the given array is bounded between [1,2500] which is medium
-values of the nums[i] themselves is bounded between [-10e4,10e4].
+A subsequence of a array is a non contigious but in order series of element of a array, a subsequence can have 0 and more elements and be the entire array.
 
-Direction, 
-We could proceed from 
-    left to right
-        need to see if i value < r value or not
-    right to left
-        will be the same but in reverse order ig..
 
-pattern,
-    It seems like a subsequence dp problem? We just need to optimise for the longest length 
-    with the constraint of previous element being greater than the current one...
+Constraints:
+nums.length: [1,2500]
+nums[i]: [-10e4,10e4]
 
-decision:
-    LongestSubsequenceThatEndsAt(4):
-        
-        If we fix the element which is included in the subsequence,
-            we just need to compare with the values of all the element preceeding it,
-                then if they are smaller than it then they could be part of it's longest sequence,
-                to truly check the maximum, we just compare the max_len found so far..
-            max
-            for i from 0 to 3:
-                if i less than 4:
-                    then max(LongestSubsequenceThatEndsAt(i)+1,max).
-            then we just return this max..
+We should be able to use a solution with higher complexity, the statement of the solution also suggests that a worse solution than nLogn is acceptable.
 
-        since we are fixing the last value included in the array with this recursive function
-        and the subsequence could actually end anywhere in the array,
-        we need to use a loop to find the maximum subsequence that ends at any point in the array..
+Considerations:
+    
+    any element can be thought of as the start of a susbsequence so the base case for the longest icnreasing subsequence should be 1 as the minimum input is also 1 in length.
 
-        since a solution i is dependent on values smaller than it,
+    def LongestSubsequenceThatEndsAt(i):
+        max_len = 1
+        for idx in range(i):
+            if arr[idx] < arr[i]:
+                max_len = max(max_len, LongestSubsequenceThatEndsAt(idx)) +1
+        return max_len
+    the time complexity should be N^2 due to the use of a for loop for a 1-D problem 
+    space complexity is still N.
 
-        if we convert this solution to top down, the for loop should go from 0 to n.
+    for actually finding the end answer, we need to conser the fact that a longest sequence could end at any point in the array and not be constrainted.
+    so we need to find the max of the LongestSubsequenceThatEndsAt over the entire list indexs.
 
-        
-        we could also use the princple of binary search to effectively find the longest subsequence,
-        at every step, if a value is smaller then any the values present already in a array, 
-        then we replace it at that point by using bisect_left..
+    we should also consider the conversion to top down for efficieny.
 
-        if not, we append it since it will form a increasng sequnce with the previous values already..
+    we can convert it to topdown by first replacing LongestSubsequenceThatEndsAt with DP that is initialised to [1]*n where n is length of arr.
+    
+    then we just need to run a loop from 0 to i as we had already done for the recursion and then just do the function call where the recurrsive calls are replaced with DP accesses, max_len is replaced by usage of DP[i]
 
-        for example,  0,3.
-        with bisect left on this array with value 2. It gives the value 1.
+    we can then replace the function call with the for loop.
 
-        while left < right:
-            mid = (left+right)//2
-            if target <= nums[mid]:
-                right = mid
-            else:
-                left = mid+1
-        return left
-            
-
-        
+       
 """
 
 # @leet start
 class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        patience_sort = []
-        for i in range(len(nums)):
-            idx = bisect_left(patience_sort, nums[i])
-            if idx == len(patience_sort):
-                patience_sort.append(nums[i])
-            else:
-                patience_sort[idx] = nums[i]
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        n = len(nums)
+        dp = [1]*n 
+        result = 1
+        for i in range(n):
+            for idx in range(i):
+                if nums[idx]< nums[i]:
+                    dp[i] = max(dp[i],dp[idx]+1)
+            result = max(dp[i],result)
+        return result
 
-        return len(patience_sort)
-            
-                    
 
         
 # @leet end

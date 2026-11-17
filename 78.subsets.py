@@ -36,55 +36,35 @@ from typing import *
 # @leet imports end
 
 """
-for a given array, we need to find the power set, ie set of all subsets of a array.
+Given a array of unique numbers, we need to find all possible subsets.
+a subset is defined as a set that is inside a set.
 
-a given array size is bounded between [1,10],
-which is very small.
+for backtracking, we iterate over the entire array while recursing, iteration allows us to avoid using duplicates of a single index.
 
-The values of num[i] is bounded between [-10,10]
-which is also very small, negative and they are unique.
+we use a single result array for returning.
 
-Unique is important as it simplifies the issue of having duplicate subsets,
-all we need to consider is the indexes of the values themselves and avoid duplicating them..
+we define a recursive function with index of current element,path as input ,
+    where inside 
+        for every index after the given input index in a loop,
+            we first include and recurse 
+        then we pop and recurse. 
 
-We could use recursion to explore the entirety of the search space..
-at each step,
-    we either include a element,
-    or we don't include it.
-
-    But What do we return?
-        Since this problem has a smaller bound, 
-        we could simply use a external array and append to it when we hit the base case which is just i going past the last index of the array.
-        this as such will be a n2^n solution because we are also copying the array, which for given 2^10 is doable..
-    
-    and what does including and not including actually imply..
-
-
-Working of the solution I searched,
-It keeps a result array like I did.
-
-However it recurses differently,
-Instead of a binary decision per recursion like I did, 
-it explores the search space with a loop.
-For each index in a loop, first the element is included and then we recurse and find and add all the subsets of nums that have that element,
-then we pop it and then for the remainder of the loops, it is treated as if it wasn't added.
-
-This repeats until we find all subsets.
 
 
 """
 
 # @leet start
 class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-        result = []
-        def powerset(i,arr):
-            result.append(arr[:])
-            for j in range(i,len(nums)):
-                arr.append(nums[j])
-                powerset(j+1,arr)
-                arr.pop()
-        powerset(0,[])      
+    def subsets(self, nums: list[int]) -> list[list[int]]:
+        result =[]
+        def subsets(idx,subset):
+            result.append(list(subset))
+            for i in range(idx,len(nums)):
+                subset.append(nums[i])
+                subsets(i+1,subset)
+                subset.pop()
+        subsets(0,[])
         return result
-
+        
+        
 # @leet end
